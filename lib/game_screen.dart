@@ -11,7 +11,9 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Theme.of(context).scaffoldBackgroundColor,),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(
@@ -21,8 +23,34 @@ class GameScreen extends StatelessWidget {
               ListenableBuilder(
                 listenable: viewModel,
                 builder: (context, child) {
-                  return Text("${viewModel.lives}");
-                }
+                  return Column(
+                    spacing: 12,
+                    children: [
+                      LinearProgressIndicator(
+                        value: viewModel.gameProgress,
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.green,
+                        backgroundColor: Colors.white24,
+                        minHeight: 12,
+                      ),
+                      Row(
+                        spacing: 12,
+                        children: [
+                          for (var i = 0; i < startLives; i++)
+                            Expanded(
+                              child: LinearProgressIndicator(
+                                value: viewModel.livesLeft <= i ? 0 : 1,
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.red,
+                                backgroundColor: Colors.white24,
+                                minHeight: 12,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
               ),
               Expanded(
                 child: Align(
@@ -30,7 +58,9 @@ class GameScreen extends StatelessWidget {
                   child: GameWord(viewModel: viewModel),
                 ),
               ),
-              Expanded(child: Center(child: GameBottomButtons(viewModel: viewModel))),
+              Expanded(
+                child: Center(child: GameBottomButtons(viewModel: viewModel)),
+              ),
             ],
           ),
         ),

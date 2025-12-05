@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const vowels = "аоуеиіяюєїАОУЕИІЯЮЄЇ";
+const startLives = 3;
 
 enum Status { correct, incorrect, unchecked }
 
@@ -12,30 +13,37 @@ enum CheckResult {
 }
 
 class GameViewModel extends ChangeNotifier {
-  GameViewModel(List<String> words) : _words = List.of(words) {
-    _words.shuffle();
+  GameViewModel(List<String> words)
+    : _wordsLeft = List.of(words),
+      _gameLength = words.length,
+      _livesLeft = startLives {
+    _wordsLeft.shuffle();
     _prepareNextWord();
   }
 
-  final List<String> _words;
+  final List<String> _wordsLeft;
   late String _currentString;
   late String _currentCorrectWord;
   String _currentWordDetails = "";
+  late Status _currentWordStatus;
   late String _currentViewWord;
   bool _canCheck = false;
-  int _lives = 3;
+  final int _gameLength;
+  double _gameProgress = 0;
+  int _livesLeft;
   Set<String> _incorrectAttempts = {};
-  late Status _currentWordStatus;
 
   String get currentViewWord => _currentViewWord;
 
   String get currentWordDetails => _currentWordDetails;
 
-  bool get canCheck => _canCheck;
-
   Status get currentWordStatus => _currentWordStatus;
 
-  int get lives => _lives;
+  bool get canCheck => _canCheck;
+
+  int get livesLeft => _livesLeft;
+
+  double get gameProgress => _gameProgress;
 
   bool _isAllLowercase(String word) => word == word.toLowerCase();
 
@@ -54,7 +62,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void _prepareNextWord() {
-    _currentString = _words[0];
+    _currentString = _wordsLeft[0];
     var splitString = _currentString.replaceFirst(" ", "|").split("|");
     _currentCorrectWord = splitString[0];
     _currentWordDetails = (splitString.length > 1)
@@ -85,29 +93,32 @@ class GameViewModel extends ChangeNotifier {
 
   Future<CheckResult> checkWord() async {
     if (_currentViewWord == _currentCorrectWord) {
-      _words.removeAt(0);
+      _wordsLeft.removeAt(0);
       _canCheck = false;
       _currentWordStatus = Status.correct;
       notifyListeners(); // show green
 
       await Future.delayed(const Duration(milliseconds: 700));
 
-      if (_words.isEmpty) {
+      if (_wordsLeft.isEmpty) {
+        _gameProgress = (_gameLength - _wordsLeft.length) / (_gameLength);
+        notifyListeners();
         return CheckResult.correctWin;
       } else {
+        _gameProgress = (_gameLength - _wordsLeft.length) / (_gameLength);
         _prepareNextWord();
         notifyListeners(); // show next word
         // move progress bar
         return CheckResult.correctContinue;
       }
     } else {
-      _lives--;
+      _livesLeft--;
       _markIncorrectAttempt();
       notifyListeners(); // show red
 
       await Future.delayed(const Duration(milliseconds: 700));
 
-      if (_lives == 0) {
+      if (_livesLeft == 0) {
         return CheckResult.incorrectLose;
       } else {
         _currentViewWord = _currentCorrectWord.toLowerCase();

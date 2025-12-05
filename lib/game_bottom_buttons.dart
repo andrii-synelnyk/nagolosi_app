@@ -24,7 +24,7 @@ class GameBottomButtons extends StatelessWidget {
 
                   switch (result) {
                     case CheckResult.correctWin:
-                      if (context.mounted) Navigator.pop(context, viewModel.lives);
+                      if (context.mounted) Navigator.pop(context, viewModel.livesLeft);
                       break;
                     case CheckResult.incorrectLose:
                       if (context.mounted) Navigator.pop(context, 0);
