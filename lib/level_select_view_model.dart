@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:nagolosi_app/level_repository.dart';
 
-const wordsPerLevel = 3;
+const wordsPerLevel = 15;
 
 class LevelSelectViewModel {
   LevelSelectViewModel(this._levelRepository)
@@ -72,7 +72,7 @@ class LevelSelectViewModel {
   Future<void> applyLevelResult(int levelIndex, int? result) async {
     if (result != null && result > results.value[levelIndex]) {
       final resultsCopy = List<int>.from(results.value);
-      resultsCopy.insert(levelIndex, result);
+      resultsCopy[levelIndex] = result;
       results.value = resultsCopy;
 
       final List<String> resultsToSave = results.value.map((e) => e.toString()).toList();

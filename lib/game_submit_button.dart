@@ -15,7 +15,7 @@ class GameSubmitButton extends StatelessWidget {
           style: FilledButton.styleFrom(
             shape: CircleBorder(),
             fixedSize: Size.square(100),
-            backgroundColor: Color.fromARGB(255, 255, 211, 88),
+            backgroundColor: Color(0xFFFFCA3A),
             foregroundColor: Colors.black, // Color(0xFF3C541F)
           ),
           onPressed: canSubmit

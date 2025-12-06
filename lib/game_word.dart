@@ -21,8 +21,8 @@ class GameWord extends StatelessWidget {
               builder: (context, status, child) {
                 Color wordColor = switch (status) {
                   Status.unchecked => Theme.of(context).colorScheme.onSurface,
-                  Status.incorrect => Colors.red,
-                  Status.correct => Colors.green,
+                  Status.incorrect => Color(0xFFFD3B31),
+                  Status.correct => Color(0xFF43B929),
                 };
 
                 return FittedBox(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nagolosi_app/game_view_model.dart';
+import 'package:nagolosi_app/lives_widget.dart';
 
 class GameStats extends StatelessWidget {
   const GameStats({super.key, required this.viewModel});
@@ -17,31 +18,24 @@ class GameStats extends StatelessWidget {
             return LinearProgressIndicator(
               value: progress,
               borderRadius: BorderRadius.circular(12),
-              color: Colors.green,
-              backgroundColor: Colors.white24,
+              color: Color(0xFF43B929),
+              backgroundColor: Color(0xFF2A2A2A),
               minHeight: 12,
             );
-          }
+          },
         ),
         ValueListenableBuilder<int>(
           valueListenable: viewModel.livesLeft,
           builder: (context, lives, child) {
-            return Row(
-              spacing: 12,
-              children: [
-                for (var i = 0; i < startLives; i++)
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: lives <= i ? 0 : 1,
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.red,
-                      backgroundColor: Colors.white24,
-                      minHeight: 12,
-                    ),
-                  ),
-              ],
+            return SizedBox(
+              height: 12,
+              child: LivesWidget(
+                startLives: startLives,
+                lives: lives,
+                spacing: 12,
+              ),
             );
-          }
+          },
         ),
       ],
     );
