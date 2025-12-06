@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nagolosi_app/game_stats.dart';
 import 'package:nagolosi_app/game_view_model.dart';
 import 'package:nagolosi_app/game_word.dart';
-import 'package:nagolosi_app/game_bottom_buttons.dart';
+import 'package:nagolosi_app/game_submit_button.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key, required this.viewModel});
@@ -20,38 +21,7 @@ class GameScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ListenableBuilder(
-                listenable: viewModel,
-                builder: (context, child) {
-                  return Column(
-                    spacing: 12,
-                    children: [
-                      LinearProgressIndicator(
-                        value: viewModel.gameProgress,
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.green,
-                        backgroundColor: Colors.white24,
-                        minHeight: 12,
-                      ),
-                      Row(
-                        spacing: 12,
-                        children: [
-                          for (var i = 0; i < startLives; i++)
-                            Expanded(
-                              child: LinearProgressIndicator(
-                                value: viewModel.livesLeft <= i ? 0 : 1,
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.red,
-                                backgroundColor: Colors.white24,
-                                minHeight: 12,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  );
-                },
-              ),
+              GameStats(viewModel: viewModel),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -59,7 +29,7 @@ class GameScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Center(child: GameBottomButtons(viewModel: viewModel)),
+                child: Center(child: GameSubmitButton(viewModel: viewModel)),
               ),
             ],
           ),

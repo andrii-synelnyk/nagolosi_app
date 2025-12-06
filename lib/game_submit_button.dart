@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nagolosi_app/game_view_model.dart';
 
-class GameBottomButtons extends StatelessWidget {
-  const GameBottomButtons({super.key, required this.viewModel});
+class GameSubmitButton extends StatelessWidget {
+  const GameSubmitButton({super.key, required this.viewModel});
 
   final GameViewModel viewModel;
 
