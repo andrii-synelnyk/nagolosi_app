@@ -12,11 +12,16 @@ enum CheckResult {
   incorrectLose,
 }
 
-class GameViewModel extends ChangeNotifier {
+class GameViewModel {
   GameViewModel(List<String> words)
     : _wordsLeft = List.of(words),
       _gameLength = words.length,
-      _livesLeft = startLives {
+      gameProgress = ValueNotifier<double>(0),
+      livesLeft = ValueNotifier<int>(startLives),
+      currentViewWord = ValueNotifier<String>(''),
+      currentWordDetails = ValueNotifier<String>(''),
+      currentWordStatus = ValueNotifier<Status>(Status.unchecked),
+      canSubmit = ValueNotifier<bool>(false) {
     _wordsLeft.shuffle();
     _prepareNextWord();
   }
@@ -24,106 +29,97 @@ class GameViewModel extends ChangeNotifier {
   final List<String> _wordsLeft;
   late String _currentString;
   late String _currentCorrectWord;
-  String _currentWordDetails = "";
-  late Status _currentWordStatus;
-  late String _currentViewWord;
-  bool _canCheck = false;
   final int _gameLength;
-  double _gameProgress = 0;
-  int _livesLeft;
   Set<String> _incorrectAttempts = {};
+  bool _canToggleChars = true;
 
-  String get currentViewWord => _currentViewWord;
+  final ValueNotifier<double> gameProgress;
+  final ValueNotifier<int> livesLeft;
+  final ValueNotifier<String> currentViewWord;
+  final ValueNotifier<String> currentWordDetails;
+  final ValueNotifier<Status> currentWordStatus;
+  final ValueNotifier<bool> canSubmit;
 
-  String get currentWordDetails => _currentWordDetails;
-
-  Status get currentWordStatus => _currentWordStatus;
-
-  bool get canCheck => _canCheck;
-
-  int get livesLeft => _livesLeft;
-
-  double get gameProgress => _gameProgress;
+  bool get canToggleChars => _canToggleChars;
 
   bool _isAllLowercase(String word) => word == word.toLowerCase();
 
   bool _wasTried(String word) => _incorrectAttempts.contains(word);
 
   void toggleLetterCase(int letterIndex) {
-    final chars = _currentViewWord.characters.toList();
+    final chars = currentViewWord.value.characters.toList();
     final char = chars[letterIndex];
     chars[letterIndex] = (char.toLowerCase() == char)
         ? char.toUpperCase()
         : char.toLowerCase();
-    _currentViewWord = chars.join();
+    currentViewWord.value = chars.join();
 
     _updateCanCheckAndStatus();
-    notifyListeners();
   }
 
   void _prepareNextWord() {
     _currentString = _wordsLeft[0];
     var splitString = _currentString.replaceFirst(" ", "|").split("|");
     _currentCorrectWord = splitString[0];
-    _currentWordDetails = (splitString.length > 1)
+    currentWordDetails.value = (splitString.length > 1)
         ? splitString.getRange(1, splitString.length).join()
         : "";
-    _currentViewWord = _currentCorrectWord.toLowerCase();
+    currentViewWord.value = _currentCorrectWord.toLowerCase();
     _incorrectAttempts.clear();
     _updateCanCheckAndStatus();
   }
 
   void _markIncorrectAttempt() {
-    _incorrectAttempts.add(_currentViewWord);
+    _incorrectAttempts.add(currentViewWord.value);
     _updateCanCheckAndStatus();
   }
 
   void _updateCanCheckAndStatus() {
-    if (_isAllLowercase(_currentViewWord)) {
-      _canCheck = false;
-      _currentWordStatus = Status.unchecked;
-    } else if (_wasTried(_currentViewWord)) {
-      _canCheck = false;
-      _currentWordStatus = Status.incorrect;
+    if (_isAllLowercase(currentViewWord.value)) {
+      canSubmit.value = false;
+      currentWordStatus.value = Status.unchecked;
+    } else if (_wasTried(currentViewWord.value)) {
+      canSubmit.value = false;
+      currentWordStatus.value = Status.incorrect;
     } else {
-      _canCheck = true;
-      _currentWordStatus = Status.unchecked;
+      canSubmit.value = true;
+      currentWordStatus.value = Status.unchecked;
     }
   }
 
-  Future<CheckResult> checkWord() async {
-    if (_currentViewWord == _currentCorrectWord) {
-      _wordsLeft.removeAt(0);
-      _canCheck = false;
-      _currentWordStatus = Status.correct;
-      notifyListeners(); // show green
+  Future<void> _pauseAndDisableControls() async {
+    _canToggleChars = false;
+    await Future.delayed(const Duration(milliseconds: 700));
+    _canToggleChars = true;
+  }
 
-      await Future.delayed(const Duration(milliseconds: 700));
+  Future<CheckResult> submitWord() async {
+    if (currentViewWord.value == _currentCorrectWord) {
+      _wordsLeft.removeAt(0);
+      canSubmit.value = false;
+      currentWordStatus.value = Status.correct;
+
+      await _pauseAndDisableControls();
 
       if (_wordsLeft.isEmpty) {
-        _gameProgress = (_gameLength - _wordsLeft.length) / (_gameLength);
-        notifyListeners();
+        gameProgress.value = (_gameLength - _wordsLeft.length) / (_gameLength);
         return CheckResult.correctWin;
       } else {
-        _gameProgress = (_gameLength - _wordsLeft.length) / (_gameLength);
+        gameProgress.value = (_gameLength - _wordsLeft.length) / (_gameLength);
         _prepareNextWord();
-        notifyListeners(); // show next word
-        // move progress bar
         return CheckResult.correctContinue;
       }
     } else {
-      _livesLeft--;
+      livesLeft.value--;
       _markIncorrectAttempt();
-      notifyListeners(); // show red
 
-      await Future.delayed(const Duration(milliseconds: 700));
+      await _pauseAndDisableControls();
 
-      if (_livesLeft == 0) {
+      if (livesLeft.value == 0) {
         return CheckResult.incorrectLose;
       } else {
-        _currentViewWord = _currentCorrectWord.toLowerCase();
+        currentViewWord.value = _currentCorrectWord.toLowerCase();
         _updateCanCheckAndStatus();
-        notifyListeners(); // back to base state
         return CheckResult.incorrectContinue;
       }
     }

@@ -8,9 +8,9 @@ class GameSubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: viewModel,
-      builder: (context, child) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: viewModel.canSubmit,
+      builder: (context, canSubmit, child) {
         return FilledButton(
           style: FilledButton.styleFrom(
             shape: CircleBorder(),
@@ -18,13 +18,13 @@ class GameSubmitButton extends StatelessWidget {
             backgroundColor: Color.fromARGB(255, 255, 211, 88),
             foregroundColor: Colors.black, // Color(0xFF3C541F)
           ),
-          onPressed: viewModel.canCheck
+          onPressed: canSubmit
               ? () async {
-                  final result = await viewModel.checkWord();
+                  final result = await viewModel.submitWord();
 
                   switch (result) {
                     case CheckResult.correctWin:
-                      if (context.mounted) Navigator.pop(context, viewModel.livesLeft);
+                      if (context.mounted) Navigator.pop(context, viewModel.livesLeft.value);
                       break;
                     case CheckResult.incorrectLose:
                       if (context.mounted) Navigator.pop(context, 0);
@@ -37,7 +37,7 @@ class GameSubmitButton extends StatelessWidget {
               : null,
           child: const Icon(Icons.arrow_forward_rounded, size: 50),
         );
-      },
+      }
     );
   }
 }

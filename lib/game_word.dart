@@ -8,53 +8,63 @@ class GameWord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: viewModel,
-      builder: (context, child) {
-        var chars = viewModel.currentViewWord.characters.toList();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder<String>(
+          valueListenable: viewModel.currentViewWord,
+          builder: (context, currentViewWord, child) {
+            var chars = currentViewWord.characters.toList();
 
-        Color wordColor = switch (viewModel.currentWordStatus) {
-          Status.unchecked => Theme.of(context).colorScheme.onSurface,
-          Status.incorrect => Colors.red,
-          Status.correct => Colors.green,
-        };
+            return ValueListenableBuilder<Status>(
+              valueListenable: viewModel.currentWordStatus,
+              builder: (context, status, child) {
+                Color wordColor = switch (status) {
+                  Status.unchecked => Theme.of(context).colorScheme.onSurface,
+                  Status.incorrect => Colors.red,
+                  Status.correct => Colors.green,
+                };
 
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < chars.length; i++)
-                    GestureDetector(
-                      onTap: () {
-                        if (vowels.contains(chars[i])) viewModel.toggleLetterCase(i);
-                      },
-                      child: Text(
-                        chars[i],
-                        style: TextStyle(
-                          fontSize: 50,
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w300,
-                          color: wordColor,
+                return FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < chars.length; i++)
+                        GestureDetector(
+                          onTap: viewModel.canToggleChars ? () {
+                            if (vowels.contains(chars[i])) viewModel.toggleLetterCase(i);
+                          } : null,
+                          child: Text(
+                            chars[i],
+                            style: TextStyle(
+                              fontSize: 50,
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.w300,
+                              color: wordColor,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            FittedBox(
+                    ],
+                  ),
+                );
+              }
+            );
+          }
+        ),
+        ValueListenableBuilder(
+          valueListenable: viewModel.currentWordDetails,
+          builder: (context, details, child) {
+            return FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                viewModel.currentWordDetails,
+                details,
                 style: TextStyle(fontSize: 20, color: Colors.grey),
               ),
-            ),
-          ],
-        );
-      },
+            );
+          }
+        ),
+      ],
     );
   }
 }
