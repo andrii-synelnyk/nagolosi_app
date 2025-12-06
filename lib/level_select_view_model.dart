@@ -1,49 +1,48 @@
 import 'package:flutter/foundation.dart';
 import 'package:nagolosi_app/level_repository.dart';
 
-class LevelSelectViewModel extends ChangeNotifier{
-  LevelSelectViewModel(this._levelRepository) {
+const wordsPerLevel = 3;
+
+class LevelSelectViewModel {
+  LevelSelectViewModel(this._levelRepository)
+      : isReady = ValueNotifier<bool>(false),
+        results = ValueNotifier<List<int>>([]) {
     _init();
   }
 
-  static const int _wordsPerLevel = 15;
-
   final LevelRepository _levelRepository;
 
-  bool _isReady = false;
-  bool get isReady => _isReady;
+  final ValueNotifier<bool> isReady;
+  final ValueNotifier<List<int>> results;
 
   late List<String> _assetWords;
   late final List<List<String>> _chunkedWords;
   late List<String> _savedWords;
   late int _savedWordsPerLevel;
   late List<String> _savedResults;
-  late List<int> _parsedResults;
 
   List<List<String>> get words => _chunkedWords;
-  List<int> get results => _parsedResults;
 
   Future<void> _init() async {
     await _loadAsset();
     await _loadPreferences();
-    _isReady = true;
-    notifyListeners();
+    isReady.value = true;
   }
 
   Future<void> _loadAsset() async {
     _assetWords = await _levelRepository.loadAssetWords();
-    _chunkedWords = _chunkWords(_assetWords, _wordsPerLevel);
+    _chunkedWords = _chunkWords(_assetWords, wordsPerLevel);
   }
 
   Future<void> _loadPreferences() async {
     _savedWords = await _levelRepository.loadSavedWords();
     _savedWordsPerLevel = await _levelRepository.loadWordsPerLevel();
     _savedResults = await _levelRepository.loadLevelResults();
-    _parsedResults = _savedResults.map(int.parse).toList();
+    results.value = _savedResults.map(int.parse).toList();
 
     if (_savedWords.isEmpty ||
         !listEquals(_savedWords, _assetWords) ||
-        _savedWordsPerLevel != _wordsPerLevel) {
+        _savedWordsPerLevel != wordsPerLevel) {
       await _saveCleanData();
     }
   }
@@ -51,14 +50,12 @@ class LevelSelectViewModel extends ChangeNotifier{
   Future<void> _saveCleanData() async {
     final numberOfLevels = _chunkedWords.length;
 
-    _savedResults = List.filled(numberOfLevels, "0");
-    _parsedResults = List.filled(numberOfLevels, 0);
-
-    notifyListeners();
+    final List<String> resultsToSave = List.filled(numberOfLevels, "0");
+    results.value = List.filled(numberOfLevels, 0);
 
     await _levelRepository.saveWords(_assetWords);
-    await _levelRepository.saveWordsPerLevel(_wordsPerLevel);
-    await _levelRepository.saveResults(_savedResults);
+    await _levelRepository.saveWordsPerLevel(wordsPerLevel);
+    await _levelRepository.saveResults(resultsToSave);
   }
 
   List<List<String>> _chunkWords(List<String> words, int size) {
@@ -73,12 +70,14 @@ class LevelSelectViewModel extends ChangeNotifier{
   }
 
   Future<void> applyLevelResult(int levelIndex, int? result) async {
-    if (result != null && result > _parsedResults[levelIndex]) {
-      _parsedResults[levelIndex] = result;
-      _savedResults[levelIndex] = result.toString();
-      notifyListeners();
+    if (result != null && result > results.value[levelIndex]) {
+      final resultsCopy = List<int>.from(results.value);
+      resultsCopy.insert(levelIndex, result);
+      results.value = resultsCopy;
 
-      await _levelRepository.saveResults(_savedResults);
+      final List<String> resultsToSave = results.value.map((e) => e.toString()).toList();
+
+      await _levelRepository.saveResults(resultsToSave);
     }
   }
 }

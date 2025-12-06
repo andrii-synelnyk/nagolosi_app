@@ -27,18 +27,18 @@ class GameViewModel {
   }
 
   final List<String> _wordsLeft;
-  late String _currentString;
-  late String _currentCorrectWord;
   final int _gameLength;
-  Set<String> _incorrectAttempts = {};
-  bool _canToggleChars = true;
-
   final ValueNotifier<double> gameProgress;
   final ValueNotifier<int> livesLeft;
   final ValueNotifier<String> currentViewWord;
   final ValueNotifier<String> currentWordDetails;
   final ValueNotifier<Status> currentWordStatus;
   final ValueNotifier<bool> canSubmit;
+
+  String _currentString = '';
+  String _currentCorrectWord = '';
+  Set<String> _incorrectAttempts = {};
+  bool _canToggleChars = true;
 
   bool get canToggleChars => _canToggleChars;
 

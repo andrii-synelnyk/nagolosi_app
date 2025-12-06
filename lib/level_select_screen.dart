@@ -14,31 +14,37 @@ class LevelSelectScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
-      body: ListenableBuilder(
-        listenable: viewModel,
-        builder: (context, child) {
-          if (!viewModel.isReady) {
+      body: ValueListenableBuilder(
+        valueListenable: viewModel.isReady,
+        builder: (context, isReady, child) {
+          if (!isReady) {
             return const Center(child: CircularProgressIndicator());
           }
-          return ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              for (var i = 0; i < viewModel.words.length; i++)
-                FilledButton(
-                  onPressed: () async {
-                    final gameViewModel = GameViewModel(viewModel.words[i]);
-                    final result = await Navigator.push<int>(
-                      context,
-                      MaterialPageRoute(builder: (_) => GameScreen(viewModel: gameViewModel)),
-                    );
-                    await viewModel.applyLevelResult(i, result);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text("${i + 1}"), Text("${viewModel.results[i]}")],
-                  ),
-                ),
-            ],
+
+          return ValueListenableBuilder(
+            valueListenable: viewModel.results,
+            builder: (context, results, child) {
+              return ListView(
+                padding: const EdgeInsets.all(20),
+                children: [
+                  for (var i = 0; i < viewModel.words.length; i++)
+                    FilledButton(
+                      onPressed: () async {
+                        final gameViewModel = GameViewModel(viewModel.words[i]);
+                        final result = await Navigator.push<int>(
+                          context,
+                          MaterialPageRoute(builder: (_) => GameScreen(viewModel: gameViewModel)),
+                        );
+                        await viewModel.applyLevelResult(i, result);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [Text("${i + 1}"), Text("${results[i]}")],
+                      ),
+                    ),
+                ],
+              );
+            }
           );
         }
       ),
