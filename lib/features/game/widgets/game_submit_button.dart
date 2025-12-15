@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nagolosi_app/game_view_model.dart';
+import 'package:nagolosi_app/features/game/game_view_model.dart';
 
 class GameSubmitButton extends StatelessWidget {
   const GameSubmitButton({super.key, required this.viewModel});
@@ -14,9 +14,9 @@ class GameSubmitButton extends StatelessWidget {
         return FilledButton(
           style: FilledButton.styleFrom(
             shape: CircleBorder(),
-            fixedSize: Size.square(100),
-            backgroundColor: Color(0xFFFFCA3A),
-            foregroundColor: Colors.black, // Color(0xFF3C541F)
+            fixedSize: Size.square(120),
+            //backgroundColor: Color(0xFFFFCA3A),
+            //foregroundColor: Colors.black, // Color(0xFF3C541F)
           ),
           onPressed: canSubmit
               ? () async {
@@ -35,7 +35,7 @@ class GameSubmitButton extends StatelessWidget {
                   }
                 }
               : null,
-          child: const Icon(Icons.arrow_forward_rounded, size: 50),
+          child: const Icon(Icons.arrow_forward_rounded, size: 60),
         );
       }
     );

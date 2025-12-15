@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:nagolosi_app/game_screen.dart';
-import 'package:nagolosi_app/game_view_model.dart';
-import 'package:nagolosi_app/level_button.dart';
-import 'package:nagolosi_app/level_select_view_model.dart';
+import 'package:nagolosi_app/features/game/game_screen.dart';
+import 'package:nagolosi_app/features/game/game_view_model.dart';
+import 'package:nagolosi_app/features/levels/widgets/level_button.dart';
+import 'package:nagolosi_app/app/game_data_controller.dart';
 
 class LevelSelectScreen extends StatelessWidget {
   const LevelSelectScreen({super.key, required this.viewModel});
 
-  final LevelSelectViewModel viewModel;
+  final GameDataController viewModel;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
+      appBar: AppBar(),
       body: ValueListenableBuilder(
         valueListenable: viewModel.isReady,
         builder: (context, isReady, child) {
@@ -37,7 +35,8 @@ class LevelSelectScreen extends StatelessWidget {
                     levelNumber: i + 1,
                     result: results[i],
                     startLives: startLives,
-                    onPressed: enabled ? () async {
+                    enabled: enabled,
+                    onPressed: () async {
                       final gameViewModel = GameViewModel(viewModel.words[i]);
                       final result = await Navigator.push<int>(
                         context,
@@ -47,7 +46,7 @@ class LevelSelectScreen extends StatelessWidget {
                         ),
                       );
                       await viewModel.applyLevelResult(i, result);
-                    } : null,
+                    },
                   );
                 }
               );

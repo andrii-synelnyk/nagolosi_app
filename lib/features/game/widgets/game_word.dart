@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nagolosi_app/game_view_model.dart';
+import 'package:nagolosi_app/features/game/game_view_model.dart';
 
 class GameWord extends StatelessWidget {
   const GameWord({super.key, required this.viewModel});
@@ -21,8 +21,8 @@ class GameWord extends StatelessWidget {
               builder: (context, status, child) {
                 Color wordColor = switch (status) {
                   Status.unchecked => Theme.of(context).colorScheme.onSurface,
-                  Status.incorrect => Color(0xFFFD3B31),
-                  Status.correct => Color(0xFF43B929),
+                  Status.incorrect => Color(0xFFFF4B5D),
+                  Status.correct => Theme.of(context).colorScheme.primary,
                 };
 
                 return FittedBox(
@@ -39,8 +39,7 @@ class GameWord extends StatelessWidget {
                             chars[i],
                             style: TextStyle(
                               fontSize: 50,
-                              fontFamily: 'Nunito',
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w400,
                               color: wordColor,
                             ),
                           ),
@@ -59,7 +58,7 @@ class GameWord extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 details,
-                style: TextStyle(fontSize: 20, color: Colors.grey),
+                style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.onSurfaceVariant),
               ),
             );
           }

@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
-import 'package:nagolosi_app/level_repository.dart';
+import 'package:nagolosi_app/core/repositories/game_data_repository.dart';
 
-const wordsPerLevel = 15;
+const wordsPerLevel = 5;
 
-class LevelSelectViewModel {
-  LevelSelectViewModel(this._levelRepository)
+class GameDataController {
+  GameDataController(this._repository)
       : isReady = ValueNotifier<bool>(false),
         results = ValueNotifier<List<int>>([]) {
     _init();
   }
 
-  final LevelRepository _levelRepository;
+  final GameDataRepository _repository;
 
   final ValueNotifier<bool> isReady;
   final ValueNotifier<List<int>> results;
@@ -30,14 +30,14 @@ class LevelSelectViewModel {
   }
 
   Future<void> _loadAsset() async {
-    _assetWords = await _levelRepository.loadAssetWords();
+    _assetWords = await _repository.loadAssetWords();
     _chunkedWords = _chunkWords(_assetWords, wordsPerLevel);
   }
 
   Future<void> _loadPreferences() async {
-    _savedWords = await _levelRepository.loadSavedWords();
-    _savedWordsPerLevel = await _levelRepository.loadWordsPerLevel();
-    _savedResults = await _levelRepository.loadLevelResults();
+    _savedWords = await _repository.loadSavedWords();
+    _savedWordsPerLevel = await _repository.loadWordsPerLevel();
+    _savedResults = await _repository.loadLevelResults();
     results.value = _savedResults.map(int.parse).toList();
 
     if (_savedWords.isEmpty ||
@@ -53,9 +53,9 @@ class LevelSelectViewModel {
     final List<String> resultsToSave = List.filled(numberOfLevels, "0");
     results.value = List.filled(numberOfLevels, 0);
 
-    await _levelRepository.saveWords(_assetWords);
-    await _levelRepository.saveWordsPerLevel(wordsPerLevel);
-    await _levelRepository.saveResults(resultsToSave);
+    await _repository.saveWords(_assetWords);
+    await _repository.saveWordsPerLevel(wordsPerLevel);
+    await _repository.saveResults(resultsToSave);
   }
 
   List<List<String>> _chunkWords(List<String> words, int size) {
@@ -77,7 +77,7 @@ class LevelSelectViewModel {
 
       final List<String> resultsToSave = results.value.map((e) => e.toString()).toList();
 
-      await _levelRepository.saveResults(resultsToSave);
+      await _repository.saveResults(resultsToSave);
     }
   }
 }

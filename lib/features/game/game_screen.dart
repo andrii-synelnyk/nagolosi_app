@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nagolosi_app/game_stats.dart';
-import 'package:nagolosi_app/game_view_model.dart';
-import 'package:nagolosi_app/game_word.dart';
-import 'package:nagolosi_app/game_submit_button.dart';
+import 'package:nagolosi_app/features/game/widgets/game_progress_widget.dart';
+import 'package:nagolosi_app/features/game/game_view_model.dart';
+import 'package:nagolosi_app/features/game/widgets/game_word.dart';
+import 'package:nagolosi_app/features/game/widgets/game_submit_button.dart';
+import 'package:nagolosi_app/features/lives_widget.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key, required this.viewModel});
@@ -12,16 +13,22 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
+      appBar: AppBar(title: ValueListenableBuilder<int>(
+        valueListenable: viewModel.livesLeft,
+        builder: (context, lives, child) {
+          return LivesWidget(
+            startLives: startLives,
+            lives: lives,
+          );
+        },
+      ),),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GameStats(viewModel: viewModel),
+              GameProgressWidget(viewModel: viewModel),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,

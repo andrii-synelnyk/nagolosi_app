@@ -1,8 +1,8 @@
-import 'package:nagolosi_app/asset_service.dart';
-import 'package:nagolosi_app/shared_preferences_service.dart';
+import 'package:nagolosi_app/core/services/asset_service.dart';
+import 'package:nagolosi_app/core/services/shared_preferences_service.dart';
 
-class LevelRepository {
-  LevelRepository(this._assetService, this._preferenceService);
+class GameDataRepository {
+  GameDataRepository(this._assetService, this._preferenceService);
 
   final AssetService _assetService;
   final SharedPreferencesService _preferenceService;

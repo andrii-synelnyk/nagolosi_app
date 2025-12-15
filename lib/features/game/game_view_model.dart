@@ -37,7 +37,7 @@ class GameViewModel {
 
   String _currentString = '';
   String _currentCorrectWord = '';
-  Set<String> _incorrectAttempts = {};
+  final Set<String> _incorrectAttempts = {};
   bool _canToggleChars = true;
 
   bool get canToggleChars => _canToggleChars;

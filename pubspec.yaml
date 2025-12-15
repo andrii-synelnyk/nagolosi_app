@@ -93,9 +93,6 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   fonts:
-   - family: Rubik Dirt
-     fonts:
-       - asset: assets/fonts/RubikDirt-Regular.ttf
    - family: Nunito
      fonts:
        - asset: assets/fonts/Nunito-ExtraLight.ttf
