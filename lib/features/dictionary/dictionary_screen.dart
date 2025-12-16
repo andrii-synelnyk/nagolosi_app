@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:nagolosi_app/app/game_data_controller.dart';
 
 class DictionaryScreen extends StatelessWidget {
-  const DictionaryScreen({super.key, required this.viewModel});
+  const DictionaryScreen({super.key, required this.controller});
 
-  final GameDataController viewModel;
+  final GameDataController controller;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: ValueListenableBuilder(
-        valueListenable: viewModel.isReady,
+        valueListenable: controller.isReady,
         builder: (context, isReady, child) {
           if (!isReady) {
             return const Center(child: CircularProgressIndicator());
@@ -20,7 +20,7 @@ class DictionaryScreen extends StatelessWidget {
           return ListView(
             padding: EdgeInsets.all(20),
             children: [
-              for (int i = 0; i < viewModel.words.length; i++) ...[
+              for (int i = 0; i < controller.words.length; i++) ...[
                 Text(
                   "Рівень ${i + 1}",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
@@ -30,9 +30,9 @@ class DictionaryScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (int k = 0; k < viewModel.words[i].length; k++)
+                      for (int k = 0; k < controller.words[i].length; k++)
                         Text(
-                          viewModel.words[i][k],
+                          controller.words[i][k],
                           style: TextStyle(
                             fontSize: 18,
                             color: Theme.of(context).colorScheme.onSurfaceVariant,

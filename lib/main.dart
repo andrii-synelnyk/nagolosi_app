@@ -16,15 +16,15 @@ void main() {
     assetService,
     preferenceService,
   );
-  final gameDataViewModel = GameDataController(gameDataRepository);
+  final gameDataController = GameDataController(gameDataRepository);
 
-  runApp(MyApp(gameDataViewModel: gameDataViewModel));
+  runApp(MyApp(gameDataController: gameDataController));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.gameDataViewModel});
+  const MyApp({super.key, required this.gameDataController});
 
-  final GameDataController gameDataViewModel;
+  final GameDataController gameDataController;
 
   ThemeData _baseTheme(Brightness brightness) {
     final scheme = ColorScheme.fromSeed(
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       // theme: _baseTheme(Brightness.light),
       darkTheme: _baseTheme(Brightness.dark),
-      home: MenuScreen(gameDataViewModel: gameDataViewModel),
+      home: MenuScreen(gameDataController: gameDataController),
     );
   }
 }

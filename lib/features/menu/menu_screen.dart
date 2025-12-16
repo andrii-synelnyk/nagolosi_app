@@ -5,9 +5,9 @@ import 'package:nagolosi_app/app/game_data_controller.dart';
 import 'package:nagolosi_app/features/menu/widgets/menu_button.dart';
 
 class MenuScreen extends StatelessWidget {
-  const MenuScreen({super.key, required this.gameDataViewModel});
+  const MenuScreen({super.key, required this.gameDataController});
 
-  final GameDataController gameDataViewModel;
+  final GameDataController gameDataController;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class MenuScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) =>
-                          LevelSelectScreen(viewModel: gameDataViewModel),
+                          LevelSelectScreen(controller: gameDataController),
                     ),
                   );
                 },
@@ -40,7 +40,7 @@ class MenuScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push<int>(
                     context,
-                    MaterialPageRoute(builder: (_) => DictionaryScreen(viewModel: gameDataViewModel)),
+                    MaterialPageRoute(builder: (_) => DictionaryScreen(controller: gameDataController)),
                   );
                 },
               ),

@@ -5,27 +5,27 @@ import 'package:nagolosi_app/features/levels/widgets/level_button.dart';
 import 'package:nagolosi_app/app/game_data_controller.dart';
 
 class LevelSelectScreen extends StatelessWidget {
-  const LevelSelectScreen({super.key, required this.viewModel});
+  const LevelSelectScreen({super.key, required this.controller});
 
-  final GameDataController viewModel;
+  final GameDataController controller;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: ValueListenableBuilder(
-        valueListenable: viewModel.isReady,
+        valueListenable: controller.isReady,
         builder: (context, isReady, child) {
           if (!isReady) {
             return const Center(child: CircularProgressIndicator());
           }
 
           return ValueListenableBuilder(
-            valueListenable: viewModel.results,
+            valueListenable: controller.results,
             builder: (context, results, child) {
               return ListView.separated(
                 padding: const EdgeInsets.all(20),
-                itemCount: viewModel.words.length,
+                itemCount: controller.words.length,
                 separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 12),
                 itemBuilder: (BuildContext context, int i) {
                   // final enabled = true;
@@ -37,7 +37,7 @@ class LevelSelectScreen extends StatelessWidget {
                     startLives: startLives,
                     enabled: enabled,
                     onPressed: () async {
-                      final gameViewModel = GameViewModel(viewModel.words[i]);
+                      final gameViewModel = GameViewModel(controller.words[i]);
                       final result = await Navigator.push<int>(
                         context,
                         MaterialPageRoute(
@@ -45,7 +45,7 @@ class LevelSelectScreen extends StatelessWidget {
                               GameScreen(viewModel: gameViewModel),
                         ),
                       );
-                      await viewModel.applyLevelResult(i, result);
+                      await controller.applyLevelResult(i, result);
                     },
                   );
                 }

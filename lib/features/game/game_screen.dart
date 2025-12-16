@@ -21,7 +21,7 @@ class GameScreen extends StatelessWidget {
             lives: lives,
           );
         },
-      ),),
+      ), centerTitle: true,),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(

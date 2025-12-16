@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:nagolosi_app/core/repositories/game_data_repository.dart';
 
-const wordsPerLevel = 5;
+const wordsPerLevel = 15;
 
 class GameDataController {
   GameDataController(this._repository)
