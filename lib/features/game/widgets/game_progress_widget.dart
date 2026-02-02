@@ -11,12 +11,16 @@ class GameProgressWidget extends StatelessWidget {
     return ValueListenableBuilder<double>(
       valueListenable: viewModel.gameProgress,
       builder: (context, progress, child) {
-        return LinearProgressIndicator(
-          value: progress,
-          borderRadius: BorderRadius.circular(12),
-          //color: Color(0xFF43B929),
-          //backgroundColor: Color(0xFF2A2A2A),
-          minHeight: 12,
+        return TweenAnimationBuilder(
+          tween: Tween<double>(end: progress),
+          duration: const Duration(milliseconds: 300),
+          builder: (context, value, child) {
+            return LinearProgressIndicator(
+              value: value,
+              borderRadius: BorderRadius.circular(12),
+              minHeight: 12,
+            );
+          }
         );
       },
     );
