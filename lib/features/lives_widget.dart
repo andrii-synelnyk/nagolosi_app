@@ -27,7 +27,7 @@ class LivesWidget extends StatelessWidget {
             for (var i = 0; i < startLives; i++)
               TweenAnimationBuilder(
                 tween: Tween<double>(end: lives <= i ? 0 : 1),
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 200),
                 builder: (context, value, child) {
                   return Icon(
                     Icons.favorite_rounded,
