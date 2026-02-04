@@ -43,6 +43,7 @@ class MenuScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => DictionaryScreen(controller: gameDataController)),
                   );
                 },
+                tonal: true,
               ),
             ],
           ),

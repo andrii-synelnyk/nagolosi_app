@@ -26,7 +26,7 @@ class GameRulesDialog extends StatelessWidget {
         ],
       ),
       actions: <Widget>[
-        TextButton(
+        FilledButton.tonal(
           onPressed: () => Navigator.pop(context, 'OK'),
           child: const Text('ГАРАЗД'),
         ),
