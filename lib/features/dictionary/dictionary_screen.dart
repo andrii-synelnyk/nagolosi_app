@@ -23,10 +23,17 @@ class DictionaryScreen extends StatelessWidget {
               for (int i = 0; i < controller.words.length; i++) ...[
                 Text(
                   "Рівень ${i + 1}",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
+                SizedBox(height: 16),
+                Container(
+                  padding: .all(16),
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -55,7 +62,7 @@ class DictionaryScreen extends StatelessWidget {
           TextSpan(
             text: word,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 17,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w500,
             ),
@@ -64,7 +71,7 @@ class DictionaryScreen extends StatelessWidget {
             TextSpan(
               text: " $desc",
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 17,
                 color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w500,
               ),

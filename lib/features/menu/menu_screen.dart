@@ -17,7 +17,7 @@ class MenuScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 30,
+            spacing: 20,
             children: [
               MenuButton(
                 icon: Icons.play_arrow_rounded,

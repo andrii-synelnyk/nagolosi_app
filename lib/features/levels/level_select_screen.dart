@@ -26,10 +26,10 @@ class LevelSelectScreen extends StatelessWidget {
               return ListView.separated(
                 padding: const EdgeInsets.all(20),
                 itemCount: controller.words.length,
-                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 12),
+                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 16),
                 itemBuilder: (BuildContext context, int i) {
                   // final enabled = true;
-                  final enabled = (i == 0 || i > 0 && results[i - 1] > 0) ? true : false;
+                  final enabled = i == 0 || results[i - 1] > 0;
 
                   return LevelButton(
                     levelNumber: i + 1,
