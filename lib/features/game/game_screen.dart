@@ -30,7 +30,7 @@ class GameScreen extends StatelessWidget {
                 icon: Icon(Icons.help_outline_rounded),
                 onPressed: () => showDialog<String>(
                   context: context,
-                  builder: (BuildContext context) => GameRulesDialog()
+                  builder: (BuildContext context) => GameRulesDialog(),
                 ),
               ),
             ),
@@ -43,7 +43,10 @@ class GameScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GameProgressWidget(viewModel: viewModel),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 500),
+                child: GameProgressWidget(viewModel: viewModel),
+              ),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,

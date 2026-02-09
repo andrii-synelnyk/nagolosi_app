@@ -13,46 +13,51 @@ class LevelSelectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: ValueListenableBuilder(
-        valueListenable: controller.isReady,
-        builder: (context, isReady, child) {
-          if (!isReady) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 500),
+          child: ValueListenableBuilder(
+            valueListenable: controller.isReady,
+            builder: (context, isReady, child) {
+              if (!isReady) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          return ValueListenableBuilder(
-            valueListenable: controller.results,
-            builder: (context, results, child) {
-              return ListView.separated(
-                padding: const EdgeInsets.all(20),
-                itemCount: controller.words.length,
-                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 16),
-                itemBuilder: (BuildContext context, int i) {
-                  // final enabled = true;
-                  final enabled = i == 0 || results[i - 1] > 0;
+              return ValueListenableBuilder(
+                valueListenable: controller.results,
+                builder: (context, results, child) {
+                  return ListView.separated(
+                    padding: const EdgeInsets.all(20),
+                    itemCount: controller.words.length,
+                    separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 16),
+                    itemBuilder: (BuildContext context, int i) {
+                      // final enabled = true;
+                      final enabled = i == 0 || results[i - 1] > 0;
 
-                  return LevelButton(
-                    levelNumber: i + 1,
-                    result: results[i],
-                    startLives: startLives,
-                    enabled: enabled,
-                    onPressed: () async {
-                      final gameViewModel = GameViewModel(controller.words[i]);
-                      final result = await Navigator.push<int>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              GameScreen(viewModel: gameViewModel),
-                        ),
+                      return LevelButton(
+                        levelNumber: i + 1,
+                        result: results[i],
+                        startLives: startLives,
+                        enabled: enabled,
+                        onPressed: () async {
+                          final gameViewModel = GameViewModel(controller.words[i]);
+                          final result = await Navigator.push<int>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  GameScreen(viewModel: gameViewModel),
+                            ),
+                          );
+                          await controller.applyLevelResult(i, result);
+                        },
                       );
-                      await controller.applyLevelResult(i, result);
-                    },
+                    }
                   );
-                }
+                },
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

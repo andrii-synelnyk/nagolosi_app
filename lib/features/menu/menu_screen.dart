@@ -13,39 +13,44 @@ class MenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 20,
-            children: [
-              MenuButton(
-                icon: Icons.play_arrow_rounded,
-                iconSize: 70,
-                label: "Грати",
-                onPressed: () {
-                  Navigator.push<int>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          LevelSelectScreen(controller: gameDataController),
-                    ),
-                  );
-                },
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 500),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 20,
+                children: [
+                  MenuButton(
+                    icon: Icons.play_arrow_rounded,
+                    iconSize: 70,
+                    label: "Грати",
+                    onPressed: () {
+                      Navigator.push<int>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              LevelSelectScreen(controller: gameDataController),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuButton(
+                    icon: Icons.menu_book_rounded,
+                    iconSize: 50,
+                    label: "Словник",
+                    onPressed: () {
+                      Navigator.push<int>(
+                        context,
+                        MaterialPageRoute(builder: (_) => DictionaryScreen(controller: gameDataController)),
+                      );
+                    },
+                    tonal: true,
+                  ),
+                ],
               ),
-              MenuButton(
-                icon: Icons.menu_book_rounded,
-                iconSize: 50,
-                label: "Словник",
-                onPressed: () {
-                  Navigator.push<int>(
-                    context,
-                    MaterialPageRoute(builder: (_) => DictionaryScreen(controller: gameDataController)),
-                  );
-                },
-                tonal: true,
-              ),
-            ],
+            ),
           ),
         ),
       ),

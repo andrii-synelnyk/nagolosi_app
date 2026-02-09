@@ -25,7 +25,7 @@ class LevelButton extends StatelessWidget {
     return FilledButton.tonal(
       style: FilledButton.styleFrom(
         padding: .zero,
-        fixedSize: .fromHeight(_height),
+        minimumSize: .fromHeight(_height),
         shape: RoundedRectangleBorder(borderRadius: .circular(_radius)),
       ),
       onPressed: enabled ? onPressed : null,
