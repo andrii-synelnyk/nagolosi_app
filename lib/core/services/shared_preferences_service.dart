@@ -1,9 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {
-  static const String _kWords = "words";
-  static const String _kWordsPerLevel = "wordsPerLevel";
-  static const String _kResults = "results";
+  static const String _kWords = 'words';
+  static const String _kWordsPerLevel = 'wordsPerLevel';
+  static const String _kResults = 'results';
 
   Future<List<String>> loadWords() async {
     final prefs = await SharedPreferences.getInstance();

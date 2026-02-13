@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nagolosi_app/app/game_data_controller.dart';
 
 class DictionaryScreen extends StatelessWidget {
-  const DictionaryScreen({super.key, required this.controller});
+  const DictionaryScreen({required this.controller, super.key});
 
   final GameDataController controller;
 
@@ -18,16 +18,19 @@ class DictionaryScreen extends StatelessWidget {
           }
 
           return ListView(
-            padding: EdgeInsets.all(20),
+            padding: const .all(20),
             children: [
               for (int i = 0; i < controller.words.length; i++) ...[
                 Text(
-                  "Рівень ${i + 1}",
-                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700),
+                  'Рівень ${i + 1}',
+                  style: const TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
-                  padding: .all(16),
+                  padding: const .all(16),
                   decoration: ShapeDecoration(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -42,7 +45,7 @@ class DictionaryScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
               ],
             ],
           );
@@ -52,7 +55,7 @@ class DictionaryScreen extends StatelessWidget {
   }
 
   Widget buildWordLine(BuildContext context, String raw) {
-    final parts = raw.replaceFirst(" ", "|").split("|");
+    final parts = raw.replaceFirst(' ', '|').split('|');
     final word = parts[0];
     final desc = parts.length > 1 ? parts[1] : null;
 
@@ -69,7 +72,7 @@ class DictionaryScreen extends StatelessWidget {
           ),
           if (desc != null)
             TextSpan(
-              text: " $desc",
+              text: ' $desc',
               style: TextStyle(
                 fontSize: 17,
                 color: Theme.of(context).colorScheme.onSurface,

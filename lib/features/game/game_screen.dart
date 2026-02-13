@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nagolosi_app/features/game/widgets/game_progress_widget.dart';
 import 'package:nagolosi_app/features/game/game_view_model.dart';
+import 'package:nagolosi_app/features/game/widgets/game_progress_widget.dart';
 import 'package:nagolosi_app/features/game/widgets/game_rules_dialog.dart';
-import 'package:nagolosi_app/features/game/widgets/game_word.dart';
 import 'package:nagolosi_app/features/game/widgets/game_submit_button.dart';
+import 'package:nagolosi_app/features/game/widgets/game_word.dart';
 import 'package:nagolosi_app/features/lives_widget.dart';
 
 class GameScreen extends StatelessWidget {
-  const GameScreen({super.key, required this.viewModel});
+  const GameScreen({required this.viewModel, super.key});
 
   final GameViewModel viewModel;
 
@@ -24,13 +24,13 @@ class GameScreen extends StatelessWidget {
         centerTitle: true,
         actions: <Widget>[
           ConstrainedBox(
-            constraints: BoxConstraints(minWidth: 56),
+            constraints: const BoxConstraints(minWidth: 56),
             child: Center(
               child: IconButton(
-                icon: Icon(Icons.help_outline_rounded),
-                onPressed: () => showDialog<String>(
+                icon: const Icon(Icons.help_outline_rounded),
+                onPressed: () => showDialog<void>(
                   context: context,
-                  builder: (BuildContext context) => GameRulesDialog(),
+                  builder: (context) => const GameRulesDialog(),
                 ),
               ),
             ),
@@ -38,13 +38,13 @@ class GameScreen extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 500),
+                constraints: const BoxConstraints(maxWidth: 500),
                 child: GameProgressWidget(viewModel: viewModel),
               ),
               Expanded(

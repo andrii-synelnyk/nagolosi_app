@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class MenuButton extends StatelessWidget {
   const MenuButton({
-    super.key,
     required this.icon,
     required this.iconSize,
     required this.label,
     required this.onPressed,
+    super.key,
     this.tonal = false,
   });
 
@@ -30,7 +30,7 @@ class MenuButton extends StatelessWidget {
 
     final style = FilledButton.styleFrom(
       fixedSize: const Size.fromHeight(100),
-      padding: const EdgeInsets.symmetric(horizontal: 0),
+      padding: EdgeInsets.zero,
     );
 
     return tonal

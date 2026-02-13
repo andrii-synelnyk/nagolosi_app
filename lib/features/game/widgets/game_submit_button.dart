@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nagolosi_app/features/game/game_view_model.dart';
 
 class GameSubmitButton extends StatelessWidget {
-  const GameSubmitButton({super.key, required this.viewModel});
+  const GameSubmitButton({required this.viewModel, super.key});
 
   final GameViewModel viewModel;
 
@@ -13,8 +13,8 @@ class GameSubmitButton extends StatelessWidget {
       builder: (context, canSubmit, child) {
         return FilledButton(
           style: FilledButton.styleFrom(
-            shape: CircleBorder(),
-            fixedSize: Size.square(120),
+            shape: const CircleBorder(),
+            fixedSize: const .square(120),
             //backgroundColor: Color(0xFFFFCA3A),
             //foregroundColor: Colors.black, // Color(0xFF3C541F)
           ),
@@ -24,11 +24,11 @@ class GameSubmitButton extends StatelessWidget {
 
                   switch (result) {
                     case CheckResult.correctWin:
-                      if (context.mounted) Navigator.pop(context, viewModel.livesLeft.value);
-                      break;
+                      if (context.mounted) {
+                        Navigator.pop(context, viewModel.livesLeft.value);
+                      }
                     case CheckResult.incorrectLose:
                       if (context.mounted) Navigator.pop(context, 0);
-                      break;
                     case CheckResult.correctContinue:
                     case CheckResult.incorrectContinue:
                       break;
@@ -37,7 +37,7 @@ class GameSubmitButton extends StatelessWidget {
               : null,
           child: const Icon(Icons.arrow_forward_rounded, size: 60),
         );
-      }
+      },
     );
   }
 }

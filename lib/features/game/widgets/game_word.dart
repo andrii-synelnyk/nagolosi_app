@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nagolosi_app/features/game/game_view_model.dart';
 
 class GameWord extends StatelessWidget {
-  const GameWord({super.key, required this.viewModel});
+  const GameWord({required this.viewModel, super.key});
 
   final GameViewModel viewModel;
 
@@ -14,14 +14,14 @@ class GameWord extends StatelessWidget {
         ValueListenableBuilder<String>(
           valueListenable: viewModel.currentViewWord,
           builder: (context, currentViewWord, child) {
-            var chars = currentViewWord.characters.toList();
+            final chars = currentViewWord.characters.toList();
 
             return ValueListenableBuilder<Status>(
               valueListenable: viewModel.currentWordStatus,
               builder: (context, status, child) {
-                Color wordColor = switch (status) {
+                final wordColor = switch (status) {
                   Status.unchecked => Theme.of(context).colorScheme.onSurface,
-                  Status.incorrect => Color(0xFFFF4B5D),
+                  Status.incorrect => const Color(0xFFFF4B5D),
                   Status.correct => Theme.of(context).colorScheme.primary,
                 };
 
@@ -32,9 +32,13 @@ class GameWord extends StatelessWidget {
                     children: [
                       for (var i = 0; i < chars.length; i++)
                         GestureDetector(
-                          onTap: viewModel.canToggleChars ? () {
-                            if (vowels.contains(chars[i])) viewModel.toggleLetterCase(i);
-                          } : null,
+                          onTap: viewModel.canToggleChars
+                              ? () {
+                                  if (vowels.contains(chars[i])) {
+                                    viewModel.toggleLetterCase(i);
+                                  }
+                                }
+                              : null,
                           child: Text(
                             chars[i],
                             style: TextStyle(
@@ -47,9 +51,9 @@ class GameWord extends StatelessWidget {
                     ],
                   ),
                 );
-              }
+              },
             );
-          }
+          },
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.currentWordDetails,
@@ -58,10 +62,13 @@ class GameWord extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 details,
-                style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             );
-          }
+          },
         ),
       ],
     );

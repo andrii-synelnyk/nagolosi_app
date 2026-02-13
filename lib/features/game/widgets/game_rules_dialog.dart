@@ -13,7 +13,7 @@ class GameRulesDialog extends StatelessWidget {
         height: 50,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondaryContainer, // 👈 top color
+          color: Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(28), // matches AlertDialog radius
           ),
@@ -27,20 +27,20 @@ class GameRulesDialog extends StatelessWidget {
         mainAxisSize: .min,
         children: [
           Padding(
-            padding: .symmetric(vertical: 16),
+            padding: const .symmetric(vertical: 16),
             child: Lottie.asset('assets/word_animation.json', repeat: false),
           ),
-          Text(
-            "• натискайте на голосні літери, щоб обрати правильний наголос",
+          const Text(
+            '• натискайте на голосні літери, щоб обрати правильний наголос',
           ),
-          Text.rich(
+          const Text.rich(
             TextSpan(
-              children: const [
+              children: [
                 TextSpan(
-                  text: "• якщо слово має два можливі наголоси, зазначте ",
+                  text: '• якщо слово має два можливі наголоси, зазначте ',
                 ),
                 TextSpan(
-                  text: "обидва",
+                  text: 'обидва',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
@@ -50,7 +50,7 @@ class GameRulesDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         FilledButton.tonal(
-          onPressed: () => Navigator.pop(context, 'OK'),
+          onPressed: () => Navigator.pop(context),
           child: const Text('Гаразд'),
         ),
       ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nagolosi_app/features/game/game_view_model.dart';
 
 class GameProgressWidget extends StatelessWidget {
-  const GameProgressWidget({super.key, required this.viewModel});
+  const GameProgressWidget({required this.viewModel, super.key});
 
   final GameViewModel viewModel;
 

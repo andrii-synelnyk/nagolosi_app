@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const vowels = "аоуеиіяюєїАОУЕИІЯЮЄЇ";
+const vowels = 'аоуеиіяюєїАОУЕИІЯЮЄЇ';
 const startLives = 3;
 
 enum Status { correct, incorrect, unchecked }
@@ -59,11 +59,11 @@ class GameViewModel {
 
   void _prepareNextWord() {
     _currentString = _wordsLeft[0];
-    var splitString = _currentString.replaceFirst(" ", "|").split("|");
+    final splitString = _currentString.replaceFirst(' ', '|').split('|');
     _currentCorrectWord = splitString[0];
     currentWordDetails.value = (splitString.length > 1)
         ? splitString.getRange(1, splitString.length).join()
-        : "";
+        : '';
     currentViewWord.value = _currentCorrectWord.toLowerCase();
     _incorrectAttempts.clear();
     _updateCanCheckAndStatus();
@@ -89,7 +89,7 @@ class GameViewModel {
 
   Future<void> _pauseAndDisableControls() async {
     _canToggleChars = false;
-    await Future.delayed(const Duration(milliseconds: 700));
+    await Future<void>.delayed(const Duration(milliseconds: 700));
     _canToggleChars = true;
   }
 
@@ -102,10 +102,10 @@ class GameViewModel {
       await _pauseAndDisableControls();
 
       if (_wordsLeft.isEmpty) {
-        gameProgress.value = (_gameLength - _wordsLeft.length) / (_gameLength);
+        gameProgress.value = (_gameLength - _wordsLeft.length) / _gameLength;
         return CheckResult.correctWin;
       } else {
-        gameProgress.value = (_gameLength - _wordsLeft.length) / (_gameLength);
+        gameProgress.value = (_gameLength - _wordsLeft.length) / _gameLength;
         _prepareNextWord();
         return CheckResult.correctContinue;
       }

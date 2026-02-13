@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nagolosi_app/core/services/asset_service.dart';
-import 'package:nagolosi_app/core/repositories/game_data_repository.dart';
 import 'package:nagolosi_app/app/game_data_controller.dart';
-import 'package:nagolosi_app/features/menu/menu_screen.dart';
+import 'package:nagolosi_app/core/repositories/game_data_repository.dart';
+import 'package:nagolosi_app/core/services/asset_service.dart';
 import 'package:nagolosi_app/core/services/shared_preferences_service.dart';
+import 'package:nagolosi_app/features/menu/menu_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   final assetService = AssetService();
   final preferenceService = SharedPreferencesService();
@@ -22,7 +22,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.gameDataController});
+  const MyApp({required this.gameDataController, super.key});
 
   final GameDataController gameDataController;
 

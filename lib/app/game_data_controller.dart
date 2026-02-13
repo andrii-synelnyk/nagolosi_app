@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:nagolosi_app/core/repositories/game_data_repository.dart';
 
@@ -7,7 +9,7 @@ class GameDataController {
   GameDataController(this._repository)
       : isReady = ValueNotifier<bool>(false),
         results = ValueNotifier<List<int>>([]) {
-    _init();
+    unawaited(_init());
   }
 
   final GameDataRepository _repository;
@@ -50,7 +52,7 @@ class GameDataController {
   Future<void> _saveCleanData() async {
     final numberOfLevels = _chunkedWords.length;
 
-    final List<String> resultsToSave = List.filled(numberOfLevels, "0");
+    final resultsToSave = List<String>.filled(numberOfLevels, '0');
     results.value = List.filled(numberOfLevels, 0);
 
     await _repository.saveWords(_assetWords);
@@ -59,7 +61,7 @@ class GameDataController {
   }
 
   List<List<String>> _chunkWords(List<String> words, int size) {
-    final List<List<String>> chunks = [];
+    final chunks = <List<String>>[];
 
     for (var i = 0; i < words.length; i += size) {
       final end = (i + size < words.length) ? i + size : words.length;
@@ -75,7 +77,7 @@ class GameDataController {
       resultsCopy[levelIndex] = result;
       results.value = resultsCopy;
 
-      final List<String> resultsToSave = results.value.map((e) => e.toString()).toList();
+      final resultsToSave = results.value.map((e) => e.toString()).toList();
 
       await _repository.saveResults(resultsToSave);
     }

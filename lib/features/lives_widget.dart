@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LivesWidget extends StatelessWidget {
-  const LivesWidget({super.key, required this.startLives, required this.lives});
+  const LivesWidget({required this.startLives, required this.lives, super.key});
 
   final int startLives;
   final int lives;
@@ -32,7 +32,7 @@ class LivesWidget extends StatelessWidget {
                   return Icon(
                     Icons.favorite_rounded,
                     size: 28,
-                    color: Color(0xFFFF4B5D).withValues(alpha: value),
+                    color: const Color(0xFFFF4B5D).withValues(alpha: value),
                   );
                 },
               ),

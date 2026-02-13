@@ -3,12 +3,12 @@ import 'package:nagolosi_app/features/lives_widget.dart';
 
 class LevelButton extends StatelessWidget {
   const LevelButton({
-    super.key,
     required this.levelNumber,
     required this.result,
     required this.startLives,
     required this.enabled,
     required this.onPressed,
+    super.key,
   });
 
   static const double _height = 70;
@@ -25,7 +25,7 @@ class LevelButton extends StatelessWidget {
     return FilledButton.tonal(
       style: FilledButton.styleFrom(
         padding: .zero,
-        minimumSize: .fromHeight(_height),
+        minimumSize: const .fromHeight(_height),
         shape: RoundedRectangleBorder(borderRadius: .circular(_radius)),
       ),
       onPressed: enabled ? onPressed : null,
@@ -33,24 +33,28 @@ class LevelButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: .symmetric(horizontal: 24),
+            padding: const .symmetric(horizontal: 24),
             child: Text(
-              "Рівень $levelNumber",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              'Рівень $levelNumber',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
           ),
           if (enabled)
             Ink(
-              padding: .symmetric(horizontal: 24),
+              padding: const .symmetric(horizontal: 24),
               height: _height,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.horizontal(right: .circular(_radius)),
+                borderRadius: const BorderRadius.horizontal(
+                  right: .circular(_radius),
+                ),
                 color: Theme.of(context).colorScheme.surfaceContainerHigh,
               ),
-              child: Center(child: LivesWidget(startLives: startLives, lives: result)),
+              child: Center(
+                child: LivesWidget(startLives: startLives, lives: result),
+              ),
             )
           else
-            Padding(
+            const Padding(
               padding: .symmetric(horizontal: 24),
               child: Row(
                 children: [
