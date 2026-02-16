@@ -7,8 +7,8 @@ const wordsPerLevel = 15;
 
 class GameDataController {
   GameDataController(this._repository)
-      : isReady = ValueNotifier<bool>(false),
-        results = ValueNotifier<List<int>>([]) {
+    : isReady = ValueNotifier<bool>(false),
+      results = ValueNotifier<List<int>>([]) {
     unawaited(_init());
   }
 
@@ -17,13 +17,12 @@ class GameDataController {
   final ValueNotifier<bool> isReady;
   final ValueNotifier<List<int>> results;
 
-  late List<String> _assetWords;
+  late final List<String> _assetWords;
   late final List<List<String>> _chunkedWords;
-  late List<String> _savedWords;
-  late int _savedWordsPerLevel;
-  late List<String> _savedResults;
+  late bool _shouldShowRules;
 
   List<List<String>> get words => _chunkedWords;
+  bool get shouldShowRules => _shouldShowRules;
 
   Future<void> _init() async {
     await _loadAsset();
@@ -37,14 +36,19 @@ class GameDataController {
   }
 
   Future<void> _loadPreferences() async {
-    _savedWords = await _repository.loadSavedWords();
-    _savedWordsPerLevel = await _repository.loadWordsPerLevel();
-    _savedResults = await _repository.loadLevelResults();
-    results.value = _savedResults.map(int.parse).toList();
+    final savedWords = await _repository.loadSavedWords();
+    final savedWordsPerLevel = await _repository.loadWordsPerLevel();
+    final savedResults = await _repository.loadLevelResults();
+    final savedRulesSeen = await _repository.loadRulesSeen();
 
-    if (_savedWords.isEmpty ||
-        !listEquals(_savedWords, _assetWords) ||
-        _savedWordsPerLevel != wordsPerLevel) {
+    results.value = savedResults.map(int.parse).toList();
+    _shouldShowRules = !savedRulesSeen;
+
+    // Current results data is not up to date (e.g., list of words in assets was
+    // modified via app update)
+    if (savedWords.isEmpty ||
+        !listEquals(savedWords, _assetWords) ||
+        savedWordsPerLevel != wordsPerLevel) {
       await _saveCleanData();
     }
   }
@@ -81,5 +85,12 @@ class GameDataController {
 
       await _repository.saveResults(resultsToSave);
     }
+  }
+
+  Future<void> updateRulesSeen() async {
+    if (!_shouldShowRules) return;
+
+    _shouldShowRules = false;
+    await _repository.saveRulesSeen();
   }
 }

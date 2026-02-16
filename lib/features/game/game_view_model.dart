@@ -13,8 +13,8 @@ enum CheckResult {
 }
 
 class GameViewModel {
-  GameViewModel(List<String> words)
-    : _wordsLeft = List.of(words),
+  GameViewModel(List<String> words, this.shouldShowRules)
+    : _wordsLeft = List.of(words), // copy, not to modify controller list
       _gameLength = words.length,
       gameProgress = ValueNotifier<double>(0),
       livesLeft = ValueNotifier<int>(startLives),
@@ -34,6 +34,7 @@ class GameViewModel {
   final ValueNotifier<String> currentWordDetails;
   final ValueNotifier<Status> currentWordStatus;
   final ValueNotifier<bool> canSubmit;
+  final bool shouldShowRules;
 
   String _currentString = '';
   String _currentCorrectWord = '';

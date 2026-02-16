@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:nagolosi_app/features/game/game_view_model.dart';
 import 'package:nagolosi_app/features/game/widgets/game_progress_widget.dart';
@@ -6,17 +8,39 @@ import 'package:nagolosi_app/features/game/widgets/game_submit_button.dart';
 import 'package:nagolosi_app/features/game/widgets/game_word.dart';
 import 'package:nagolosi_app/features/lives_widget.dart';
 
-class GameScreen extends StatelessWidget {
+class GameScreen extends StatefulWidget {
   const GameScreen({required this.viewModel, super.key});
 
   final GameViewModel viewModel;
+
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.viewModel.shouldShowRules) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+
+        unawaited(
+          showDialog<void>(
+            context: context,
+            builder: (context) => const GameRulesDialog(),
+          ),
+        );
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: ValueListenableBuilder<int>(
-          valueListenable: viewModel.livesLeft,
+          valueListenable: widget.viewModel.livesLeft,
           builder: (context, lives, child) {
             return LivesWidget(startLives: startLives, lives: lives);
           },
@@ -45,16 +69,18 @@ class GameScreen extends StatelessWidget {
             children: [
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 500),
-                child: GameProgressWidget(viewModel: viewModel),
+                child: GameProgressWidget(viewModel: widget.viewModel),
               ),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: GameWord(viewModel: viewModel),
+                  child: GameWord(viewModel: widget.viewModel),
                 ),
               ),
               Expanded(
-                child: Center(child: GameSubmitButton(viewModel: viewModel)),
+                child: Center(
+                  child: GameSubmitButton(viewModel: widget.viewModel),
+                ),
               ),
             ],
           ),
