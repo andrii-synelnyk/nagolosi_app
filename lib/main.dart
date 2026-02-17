@@ -6,8 +6,14 @@ import 'package:nagolosi_app/core/services/asset_service.dart';
 import 'package:nagolosi_app/core/services/shared_preferences_service.dart';
 import 'package:nagolosi_app/features/menu/menu_screen.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:nagolosi_app/firebase_options.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   final assetService = AssetService();

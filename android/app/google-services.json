@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "646260809652",
+    "project_id": "nagolosi-app",
+    "storage_bucket": "nagolosi-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646260809652:android:03ce2eea2df3067bb2dce1",
+        "android_client_info": {
+          "package_name": "com.andrewsinelnik.nagolosi_do_zno"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCclYqxKx-G6wEaEIW9D6BpEf7bHTnkD94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
