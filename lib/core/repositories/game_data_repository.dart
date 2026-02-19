@@ -32,6 +32,11 @@ class GameDataRepository {
     return rulesSeen;
   }
 
+  Future<bool> loadReviewRequested() async {
+    final reviewRequested = await _preferenceService.loadReviewRequested();
+    return reviewRequested;
+  }
+
   Future<void> saveWords(List<String> words) async {
     await _preferenceService.saveWords(words);
   }
@@ -46,5 +51,9 @@ class GameDataRepository {
 
   Future<void> saveRulesSeen() async {
     await _preferenceService.saveRulesSeen(true);
+  }
+
+  Future<void> saveReviewRequested() async {
+    await _preferenceService.saveReviewRequested(true);
   }
 }

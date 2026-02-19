@@ -42,7 +42,8 @@ class LevelSelectScreen extends StatelessWidget {
                         enabled: enabled,
                         onPressed: () async {
                           final gameViewModel = GameViewModel(
-                            controller.words[i], controller.shouldShowRules
+                            controller.words[i],
+                            controller.shouldShowRules,
                           );
                           final result = await Navigator.push<int>(
                             context,
@@ -51,8 +52,15 @@ class LevelSelectScreen extends StatelessWidget {
                                   GameScreen(viewModel: gameViewModel),
                             ),
                           );
-                          await controller.applyLevelResult(i, result);
-                          await controller.updateRulesSeen();
+                          await controller.applyLevelResult(
+                            levelIndex: i,
+                            result: result,
+                          );
+                          await controller.maybeUpdateRulesSeen();
+                          await controller.maybeRequestReview(
+                            levelIndex: i,
+                            result: result,
+                          );
                         },
                       );
                     },

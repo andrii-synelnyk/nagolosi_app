@@ -5,6 +5,7 @@ class SharedPreferencesService {
   static const String _kWordsPerLevel = 'wordsPerLevel';
   static const String _kResults = 'results';
   static const String _kRulesSeen = 'rulesSeen';
+  static const String _kReviewRequested = 'reviewRequested';
 
   Future<List<String>> loadWords() async {
     final prefs = await SharedPreferences.getInstance();
@@ -26,6 +27,11 @@ class SharedPreferencesService {
     return prefs.getBool(_kRulesSeen) ?? false;
   }
 
+  Future<bool> loadReviewRequested() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_kReviewRequested) ?? false;
+  }
+
   Future<void> saveWords(List<String> words) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(_kWords, words);
@@ -44,5 +50,10 @@ class SharedPreferencesService {
   Future<void> saveRulesSeen(bool rulesSeen) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_kRulesSeen, rulesSeen);
+  }
+
+  Future<void> saveReviewRequested(bool reviewRequested) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_kReviewRequested, reviewRequested);
   }
 }

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:nagolosi_app/core/repositories/game_data_repository.dart';
 
+import 'package:in_app_review/in_app_review.dart';
+
 const wordsPerLevel = 15;
 
 class GameDataController {
@@ -20,6 +22,7 @@ class GameDataController {
   late final List<String> _assetWords;
   late final List<List<String>> _chunkedWords;
   late bool _shouldShowRules;
+  late bool _reviewRequested;
 
   List<List<String>> get words => _chunkedWords;
   bool get shouldShowRules => _shouldShowRules;
@@ -40,9 +43,11 @@ class GameDataController {
     final savedWordsPerLevel = await _repository.loadWordsPerLevel();
     final savedResults = await _repository.loadLevelResults();
     final savedRulesSeen = await _repository.loadRulesSeen();
+    final savedReviewRequested = await _repository.loadReviewRequested();
 
     results.value = savedResults.map(int.parse).toList();
     _shouldShowRules = !savedRulesSeen;
+    _reviewRequested = savedReviewRequested;
 
     // Current results data is not up to date (e.g., list of words in assets was
     // modified via app update)
@@ -75,7 +80,10 @@ class GameDataController {
     return chunks;
   }
 
-  Future<void> applyLevelResult(int levelIndex, int? result) async {
+  Future<void> applyLevelResult({
+    required int levelIndex,
+    required int? result,
+  }) async {
     if (result != null && result > results.value[levelIndex]) {
       final resultsCopy = List<int>.from(results.value);
       resultsCopy[levelIndex] = result;
@@ -87,10 +95,34 @@ class GameDataController {
     }
   }
 
-  Future<void> updateRulesSeen() async {
+  Future<void> maybeUpdateRulesSeen() async {
     if (!_shouldShowRules) return;
 
     _shouldShowRules = false;
     await _repository.saveRulesSeen();
+  }
+
+  Future<void> maybeRequestReview({
+    required int levelIndex,
+    required int? result,
+  }) async {
+    if (result == null || result == 0) return;
+
+    if (_reviewRequested) return;
+
+    final totalLevels = _chunkedWords.length;
+    final targetLevelIndex = (totalLevels * 0.33).floor();
+
+    if (levelIndex < targetLevelIndex) return;
+
+    final inAppReview = InAppReview.instance;
+
+    final available = await inAppReview.isAvailable();
+    if (!available) return;
+
+    _reviewRequested = true;
+    await _repository.saveReviewRequested();
+
+    unawaited(inAppReview.requestReview());
   }
 }
