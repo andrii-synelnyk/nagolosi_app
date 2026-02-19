@@ -112,7 +112,8 @@ class GameDataController {
     if (_reviewRequested) return;
 
     final totalLevels = _chunkedWords.length;
-    final targetLevelIndex = (totalLevels * 0.33).floor();
+    const reviewThreshold = 0.3; // 30% of levels completed
+    final targetLevelIndex = (totalLevels * reviewThreshold).floor();
 
     if (levelIndex < targetLevelIndex) return;
 
