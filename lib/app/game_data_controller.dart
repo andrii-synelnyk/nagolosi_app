@@ -52,7 +52,8 @@ class GameDataController {
     // Current results data is not up to date (e.g., list of words in assets was
     // modified via app update)
     if (savedWords.isEmpty ||
-        !listEquals(savedWords, _assetWords) ||
+        // TODO(me): uncomment condition before the next app update
+        // !listEquals(savedWords, _assetWords) ||
         savedWordsPerLevel != wordsPerLevel) {
       await _saveCleanData();
     }
