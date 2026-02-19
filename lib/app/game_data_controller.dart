@@ -84,15 +84,15 @@ class GameDataController {
     required int levelIndex,
     required int? result,
   }) async {
-    if (result != null && result > results.value[levelIndex]) {
-      final resultsCopy = List<int>.from(results.value);
-      resultsCopy[levelIndex] = result;
-      results.value = resultsCopy;
+    if (result == null || result <= results.value[levelIndex]) return;
 
-      final resultsToSave = results.value.map((e) => e.toString()).toList();
+    final resultsCopy = List<int>.from(results.value);
+    resultsCopy[levelIndex] = result;
+    results.value = resultsCopy;
 
-      await _repository.saveResults(resultsToSave);
-    }
+    final resultsToSave = results.value.map((e) => e.toString()).toList();
+
+    await _repository.saveResults(resultsToSave);
   }
 
   Future<void> maybeUpdateRulesSeen() async {
